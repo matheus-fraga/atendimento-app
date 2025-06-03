@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,6 +42,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -57,7 +59,7 @@ public class SecurityConfig {
     // Constantes para rotas públicas e protegidas
     private static final String[] PUBLIC_ROUTES = { "/auth/**" };
     private static final String[] ADMIN_ROUTES = { "/admin/**" };
-    private static final String[] USER_ROUTES = { "/user/**" };
+    private static final String[] USER_ROUTES = { "/user/**", "/atendimentos/**" };
 
     /**
      * Configuração principal da cadeia de filtros de segurança.

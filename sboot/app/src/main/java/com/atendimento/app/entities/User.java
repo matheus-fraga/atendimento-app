@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,20 +12,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Entidade para representar os usuários na aplicação.
  * 
- * <p>Esta classe contém informações sobre os usuários, incluindo nome de usuário,
+ * <p>
+ * Esta classe contém informações sobre os usuários, incluindo nome de usuário,
  * senha, papel e status de bloqueio. As datas de criação e atualização são gerenciadas
- * automaticamente pelo Spring Data JPA.</p>
+ * automaticamente pelo Spring Data JPA.
+ * </p>
  */
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
+@Data // Gera getters, setters, equals, hashCode e toString automaticamente
+@NoArgsConstructor // Gera um construtor vazio
+@AllArgsConstructor // Gera um construtor com todos os campos
+@Builder // Adiciona o padrão Builder para facilitar a criação de objetos
 public class User {
 
     @Id
@@ -43,6 +44,7 @@ public class User {
     @JsonIgnore // Garante que a senha não seja exposta em respostas JSON
     private String password;
 
+    @Builder.Default
     private boolean isLocked = false; // Inicializado como não bloqueado por padrão
 
     @Enumerated(EnumType.STRING)
@@ -54,81 +56,4 @@ public class User {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    // Getters e Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isLocked() {
-        return isLocked;
-    }
-
-    public void setLocked(boolean locked) {
-        isLocked = locked;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // Métodos Sobrescritos
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", role=" + role +
-                ", isLocked=" + isLocked +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
 }
