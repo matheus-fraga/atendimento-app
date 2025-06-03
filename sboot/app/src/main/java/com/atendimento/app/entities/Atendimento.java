@@ -62,4 +62,8 @@ public class Atendimento {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToOne // Relacionamento com o atendente (usuário responsável)
+    @JoinColumn(name = "atendente_id", nullable = false) // Cria a FK no banco de dados
+    private User atendente;
 }

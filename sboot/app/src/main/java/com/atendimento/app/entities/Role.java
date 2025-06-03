@@ -8,7 +8,8 @@ import java.util.Optional;
  */
 public enum Role {
     USER("Usuário"),
-    ADMIN("Administrador");
+    ADMIN("Administrador"),
+    SUPERVISOR("Supervisor");
 
     private final String displayName;
 

@@ -1,6 +1,8 @@
 package com.atendimento.app.repositories;
 
 import com.atendimento.app.entities.Atendimento;
+import com.atendimento.app.entities.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +30,20 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
      * @return O atendimento, se encontrado.
      */
     Optional<Atendimento> findByProtocolo(String protocolo);
+
+    /**
+     * Busca atendimentos por tipo.
+     * 
+     * @param tipo Tipo do atendimento.
+     * @return Lista de atendimentos com o tipo especificado.
+     */
+    List<Atendimento> findAllByTipo(String tipo);
+
+    /**
+     * Busca atendimentos por atendente.
+     *
+     * @param atendente O atendente responsável.
+     * @return Lista de atendimentos associados ao atendente.
+     */
+    List<Atendimento> findAllByAtendente(User atendente);
 }

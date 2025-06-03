@@ -60,6 +60,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ROUTES = { "/auth/**" };
     private static final String[] ADMIN_ROUTES = { "/admin/**" };
     private static final String[] USER_ROUTES = { "/user/**", "/atendimentos/**" };
+    private static final String[] SUPERVISOR_ROUTES = { "/supervisor/**" };
 
     /**
      * Configuração principal da cadeia de filtros de segurança.
@@ -136,6 +137,7 @@ public class SecurityConfig {
                 .requestMatchers(PUBLIC_ROUTES).permitAll() // Rotas públicas
                 .requestMatchers(ADMIN_ROUTES).hasRole("ADMIN") // Rotas para administradores
                 .requestMatchers(USER_ROUTES).hasAnyRole("USER", "ADMIN") // Rotas para usuários e administradores
+                .requestMatchers(SUPERVISOR_ROUTES).hasRole("SUPERVISOR") // Rotas para supervisores
                 .anyRequest().authenticated() // Qualquer outra rota requer autenticação
         );
     }
