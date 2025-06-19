@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Provider } from "@/components/ui/provider"
 
 export const metadata = {
   title: "Atendimento App",
@@ -10,17 +11,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
-    <html lang="en">
+    <html suppressHydrationWarning>
       <body>
-        <header style={{ padding: "10px", backgroundColor: "#0070f3", color: "#fff" }}>
-          <h1>Atendimento App</h1>
-        </header>
-        <main>{children}</main>
-        <footer style={{ padding: "10px", backgroundColor: "#f4f4f4", textAlign: "center" }}>
-          © 2023 Atendimento App
-        </footer>
+        <Provider>{children}</Provider>
       </body>
     </html>
+    
   );
 }
+
+
+
