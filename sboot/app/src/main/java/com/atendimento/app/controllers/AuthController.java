@@ -4,7 +4,6 @@ import com.atendimento.app.entities.Role;
 import com.atendimento.app.entities.User;
 import com.atendimento.app.models.LoginRequest;
 import com.atendimento.app.models.RegisterRequest;
-import com.atendimento.app.models.TokenResponse;
 import com.atendimento.app.repositories.UserRepository;
 import com.atendimento.app.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.HttpHeaders;
+import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
@@ -48,6 +51,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${jwt.cookie.name}")
+    private String cookieName;
+
     /**
      * Endpoint para autenticação e geração de JWT.
      *
@@ -66,7 +72,20 @@ public class AuthController {
             long expiresIn = jwtTokenProvider.getExpirationMs() / 1000;
 
             logger.info("Login bem-sucedido para o usuário: {}", request.getUsername());
-            return ResponseEntity.ok(new TokenResponse(token, expiresIn));
+
+            // Cria cookie seguro com boas práticas
+            ResponseCookie cookie = ResponseCookie.from(cookieName, token)
+                .httpOnly(true) // evita acesso via JS
+                .secure(true) // HTTPS obrigatório
+                .path("/") // escopo do cookie
+                .maxAge(Duration.ofSeconds(expiresIn)) // compatível com tempo do token
+                .sameSite("Strict") // protege contra CSRF
+                .build();
+
+            // Retorna o cookie no header da resposta
+            return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body("sucess.");
         } catch (BadCredentialsException e) {
             logger.warn("Falha na autenticação para o usuário: {}", request.getUsername());
             return ResponseEntity.status(401).body(Map.of(

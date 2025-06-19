@@ -28,6 +28,7 @@ Este projeto foi desenvolvido com foco na prevenção de quatro das principais v
 
 ### 🛡️ A07 - Identification and Authentication Failures
 - Login via autenticação JWT (JSON Web Token).
+- JWT transmitido via cookie `HttpOnly`, evitando exposição ao JavaScript do cliente.
 - Senhas armazenadas com BCryptPasswordEncoder.
 - Tokens possuem validade e não podem ser reutilizados após logout ou expiração.
 
