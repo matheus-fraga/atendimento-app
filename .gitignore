@@ -38,6 +38,9 @@
 ### ASDF ###
 **/.tool-versions
 
+### Mise ###
+**/mise.toml
+
 # Ignorar arquivos relacionados a dependências
 **/node_modules/
 **/.pnp/
