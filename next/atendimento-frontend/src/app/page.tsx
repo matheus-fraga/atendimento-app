@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { Demo } from "../app/components/Demo"
-import { Login } from "../app/components/Login"
+import { Login } from "./components/Login"
 import { Box, Card  } from "@chakra-ui/react"
 
 export default function Home() {
