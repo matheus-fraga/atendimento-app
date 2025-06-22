@@ -146,7 +146,7 @@ public class AuthController {
      * @return true se o papel for válido, false caso contrário.
      */
     private boolean isValidRole(Role role) {
-        return role == Role.USER || role == Role.ADMIN;
+        return role == Role.USER || role == Role.ADMIN || role == Role.SUPERVISOR;
     }
 
     /**
