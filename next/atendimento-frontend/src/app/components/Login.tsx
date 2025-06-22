@@ -27,8 +27,11 @@ export function Login () {
       try {
         const res = await fetch('/api/auth', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Access-Control-Allow-Credentials': 'true'
           },
           body: JSON.stringify({
             username: props.username,
@@ -47,7 +50,7 @@ export function Login () {
       } catch (err:any) {
         setIntegrationFeedbackMsg(err.toString());
         setIntegrationFailed(true);
-        setIntegrationSucess(null);
+        setIntegrationSucess(false);
       } finally {
         setLoading(false);
       }
