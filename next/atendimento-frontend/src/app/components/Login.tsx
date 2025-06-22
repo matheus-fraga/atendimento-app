@@ -29,9 +29,7 @@ export function Login () {
           method: 'POST',
           credentials: 'include',
           headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-            'Access-Control-Allow-Credentials': 'true'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             username: props.username,

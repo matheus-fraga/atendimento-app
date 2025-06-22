@@ -5,8 +5,6 @@ export async function POST(req: Request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Credentials': 'true'
       },
       credentials: 'include',
       body: JSON.stringify({ username: body.username, password: body.password })
@@ -17,9 +15,13 @@ export async function POST(req: Request) {
     const data = await response.text();
     //return null;
     if(response.ok) {
+      const cookie = response.headers.get('set-cookie');
       return new Response(JSON.stringify({ msg: data}),{
           status: 200,
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(cookie ? { 'Set-Cookie': cookie } : {})
+          },
         });
       }
       // return new Response(JSON.stringify(data), {

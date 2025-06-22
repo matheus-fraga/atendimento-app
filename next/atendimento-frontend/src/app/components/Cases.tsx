@@ -12,7 +12,13 @@ export function Cases() {
   useEffect(() => {
       async function fetchCases() {
         try {
-          const res = await fetch('/api/cases');
+          const res = await fetch('/api/cases', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
           if (!res.ok) {
             throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           }
