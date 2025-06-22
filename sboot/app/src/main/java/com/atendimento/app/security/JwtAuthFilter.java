@@ -1,6 +1,7 @@
 package com.atendimento.app.security;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.servlet.http.Cookie;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -83,10 +85,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * @return O token JWT, ou null se o token não estiver presente ou estiver mal formatado.
      */
     private String resolveToken(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
-        if (bearer != null && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
+       Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                .filter(cookie -> "jwt".equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
         }
-        return null;
+         return null;
     }
 }

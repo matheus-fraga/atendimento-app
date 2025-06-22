@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.atendimento.app.security.CustomAuthenticationEntryPoint;
 import com.atendimento.app.security.JwtAuthFilter;
@@ -101,18 +102,21 @@ public class SecurityConfig {
     }
 
     /**
-     * Desabilita a proteção CSRF, já que a autenticação é Stateless (JWT).
+     * Habilita a proteção CSRF, necessária quando a autenticação usa JWT armazenado em cookie HttpOnly.
      * 
      * <p>
-     * Como a aplicação utiliza autenticação baseada em tokens JWT, a proteção contra CSRF
-     * (Cross-Site Request Forgery) não é necessária.
+     * Como o cookie JWT é enviado automaticamente pelo navegador, é preciso proteger contra ataques CSRF
+     * usando um token CSRF adicional enviado no header "X-XSRF-TOKEN".
      * </p>
      * 
      * @param http Instância do {@link HttpSecurity}.
      * @throws Exception Caso ocorra algum erro na configuração.
      */
     private void configureCsrf(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(csrf -> csrf
+            .ignoringRequestMatchers(PUBLIC_ROUTES) // Ignora CSRF só nas rotas públicas (/auth/**)
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        );
     }
 
     /**
