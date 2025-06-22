@@ -45,7 +45,7 @@ export function Cases() {
           </ButtonGroup>}
         </Center>
         <DataList.Root orientation="horizontal" divideY="1px" width="100%">
-          {cases.map((item) => (
+          {cases.map((item:any) => (
             <DataList.Item key={item.id}>
               <DataList.ItemLabel>{item.username}</DataList.ItemLabel>
               <DataList.ItemValue>{item.role}</DataList.ItemValue>
