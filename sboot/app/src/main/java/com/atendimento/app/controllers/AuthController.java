@@ -96,6 +96,13 @@ public class AuthController {
                 "error", "Credenciais inválidas",
                 "timestamp", LocalDateTime.now()
             ));
+        } catch (org.springframework.security.authentication.LockedException e) {
+            logger.warn("Usuário bloqueado tentou logar: {}", request.getUsername());
+            return ResponseEntity.status(401).body(Map.of(
+                "error", "Usuário bloqueado",
+                "message", "Esta conta está bloqueada. Contate o suporte.",
+                "timestamp", LocalDateTime.now()
+            ));
         } catch (Exception e) {
             logger.error("Erro inesperado durante o login do usuário: {}", request.getUsername(), e);
             return ResponseEntity.status(500).body(Map.of(
