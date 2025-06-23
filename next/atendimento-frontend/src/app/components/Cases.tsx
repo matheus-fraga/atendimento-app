@@ -24,6 +24,7 @@ export function Cases() {
           }
           const data = await res.json();
           setCases(data);
+          console.log(data);
         } catch (err) {
           console.error('Failed to fetch cases:', err);
           setIntegrationFailed(true);
@@ -53,8 +54,8 @@ export function Cases() {
         <DataList.Root orientation="horizontal" divideY="1px" width="100%">
           {cases.map((item:any) => (
             <DataList.Item key={item.id}>
-              <DataList.ItemLabel>{item.username}</DataList.ItemLabel>
-              <DataList.ItemValue>{item.role}</DataList.ItemValue>
+              <DataList.ItemLabel>{item.tipo}</DataList.ItemLabel>
+              <DataList.ItemValue>{item.descricao}</DataList.ItemValue>
               <CaseDialog action="View" caseContext={item}/>
               <CaseDialog action="Edit" caseContext={item}/>
               <CaseDialog action="Delete" caseContext={item}/>

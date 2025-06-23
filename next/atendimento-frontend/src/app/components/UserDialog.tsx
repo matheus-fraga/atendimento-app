@@ -1,8 +1,14 @@
-import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
+import { Button, CloseButton, Dialog, Portal, Field, Input  } from "@chakra-ui/react"
+import { useEffect, useState } from "react";
 import { UserForms } from "./UserForms"
 
 
-export function UserDialog(props) {
+export function UserDialog(props:any) {
+  const [username, setUsername] = useState(props.userContext.username);
+  const handleChange = (e:any) => {
+    setUsername(e.target.value);
+  };
+  
   if(props.action == "View") {
     return (
       <Dialog.Root>
@@ -16,28 +22,26 @@ export function UserDialog(props) {
           <Dialog.Positioner>
             <Dialog.Content>
               <Dialog.Header>
-                <Dialog.Title>User: {props.userContext.label}</Dialog.Title>
+                <Dialog.Title>User: {props.userContext.username}</Dialog.Title>
               </Dialog.Header>
               <Dialog.Body>
-                <p>
-                  Details: {props.userContext.firstName}
-                </p>
-                <p>
-                  Details: {props.userContext.lastName}
-                </p>
-                <p>
-                  Details: {props.userContext.age}
-                </p>
-                <p>
-                  Details: {props.userContext.email}
-                </p>
+                
+                <Field.Root disabled orientation="horizontal">
+                  <Field.Label>Username</Field.Label>
+                  <Input value= {props.userContext.username}/>
+                </Field.Root>
+                
+                <Field.Root disabled orientation="horizontal">
+                  <Field.Label>Role</Field.Label>
+                  <Input value= {props.userContext.role}/>
+                </Field.Root>
+                
+                <Field.Root disabled orientation="horizontal">
+                  <Field.Label>Id</Field.Label>
+                  <Input value= {props.userContext.id}/>
+                </Field.Root>
+                
               </Dialog.Body>
-              <Dialog.Footer>
-                <Dialog.ActionTrigger asChild>
-                  <Button variant="outline">Cancel</Button>
-                </Dialog.ActionTrigger>
-                <Button>Save</Button>
-              </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />
               </Dialog.CloseTrigger>
@@ -59,11 +63,32 @@ export function UserDialog(props) {
           <Dialog.Positioner>
             <Dialog.Content>
               <Dialog.Header>
-                <Dialog.Title>{props.action} User</Dialog.Title>
-              </Dialog.Header>
-              <Dialog.Body>
-                <UserForms action={props.action}></UserForms>
-              </Dialog.Body>
+                <Dialog.Title>User: {props.userContext.username}</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
+                  
+                  <Field.Root orientation="horizontal">
+                    <Field.Label>Username</Field.Label>
+                    <Input value={username} onChange={handleChange}/>
+                  </Field.Root>
+                  
+                  <Field.Root disabled orientation="horizontal">
+                    <Field.Label>Role</Field.Label>
+                    <Input value= {props.userContext.role}/>
+                  </Field.Root>
+                  
+                  <Field.Root disabled orientation="horizontal">
+                    <Field.Label>Id</Field.Label>
+                    <Input value= {props.userContext.id}/>
+                  </Field.Root>
+                  
+                </Dialog.Body>
+              <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                  <Button variant="outline">Cancel</Button>
+                </Dialog.ActionTrigger>
+                <Button>Update</Button>
+              </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />
               </Dialog.CloseTrigger>

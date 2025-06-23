@@ -9,7 +9,9 @@ export function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [integrationFailed, setIntegrationFailed] = useState(false);
-
+  
+  const [checked, setChecked] = useState(false)
+  
   useEffect(() => {
       async function fetchUsers() {
         try {
@@ -19,6 +21,7 @@ export function Users() {
           }
           const data = await res.json();
           setUsers(data);
+          console.log(data);
         } catch (err) {
           console.error('Failed to fetch users:', err);
           setIntegrationFailed(true);
@@ -49,13 +52,15 @@ export function Users() {
           {users.map((item:any) => (
             <DataList.Item key={item.id}>
               <DataList.ItemValue>{item.username} {item.role}</DataList.ItemValue>
-              <Switch.Root>
+              
+              <Switch.Root disabled={item.locked} checked={item.locked} onCheckedChange={(e) => setChecked(e.checked)}>
                 <Switch.HiddenInput />
                 <Switch.Control>
                   <Switch.Thumb />
                 </Switch.Control>
-                <Switch.Label>Is user blocked?</Switch.Label>
+                <Switch.Label >Is user blocked?</Switch.Label>
               </Switch.Root>
+
               <UserDialog action="View" userContext={item}/>
               <UserDialog action="Edit" userContext={item}/>
               <UserDialog action="Delete" userContext={item}/>
