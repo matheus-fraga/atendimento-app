@@ -1,11 +1,15 @@
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const response = await fetch('http://localhost:8080/admin/users', {
+    const cookie = req.headers.get('cookie') ?? '';
+    
+    const response = await fetch('http://localhost:8080/admin/users', { //change to cases later
       method: 'GET',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Cookie': cookie, // 🔥 repassando o cookie do navegador
+        // 'Authorization': ... se quiser continuar usando também
+      },
     });
     const data = await response.json();
     if(response.ok) {

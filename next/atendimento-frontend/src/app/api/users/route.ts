@@ -1,11 +1,14 @@
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const cookie = req.headers.get('cookie') ?? '';
+    
     const response = await fetch('http://localhost:8080/admin/users', { //change to cases later
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2Rhc2Rhc2Rhc2Rhc2QiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTA0MjM4NjcsImV4cCI6MTc1MDQyNzQ2N30.ZFpGPRWiUC9Yh19OvsG38NvqFR3QP7wS2lKftjCGxv4',
+        'Cookie': cookie, // 🔥 repassando o cookie do navegador
+        // 'Authorization': ... se quiser continuar usando também
       },
     });
     const data = await response.json();

@@ -25,14 +25,18 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, Object> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> 
-            errors.put(error.getField(), error.getDefaultMessage())
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            fieldErrors.put(error.getField(), error.getDefaultMessage())
         );
-        errors.put("error", "Erro de validação");
-        errors.put("timestamp", LocalDateTime.now());
-        return ResponseEntity.badRequest().body(errors);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("erro", "Erro de validação");
+        body.put("detalhes", fieldErrors);
+
+        return ResponseEntity.badRequest().body(body);
     }
+
 
     /**
      * Manipula exceções de validação de constraints (ex.: validação de CPF).

@@ -84,8 +84,11 @@ public class AuthController {
 
             // Retorna o cookie no header da resposta
             return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("sucess.");
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(Map.of(
+                "message", "Login realizado com sucesso",
+                "expiresIn", expiresIn
+            ));
         } catch (BadCredentialsException e) {
             logger.warn("Falha na autenticação para o usuário: {}", request.getUsername());
             return ResponseEntity.status(401).body(Map.of(
