@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Repositório para a entidade {@link Atendimento}.
  */
 @Repository
-public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {
+public interface AtendimentoRepository extends JpaRepository<Atendimento, UUID> {
 
     /**
      * Busca atendimentos pelo CPF do cliente.

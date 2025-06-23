@@ -1,7 +1,13 @@
 package com.atendimento.app.services;
 
 import com.atendimento.app.entities.Atendimento;
+import com.atendimento.app.entities.User;
 import com.atendimento.app.repositories.AtendimentoRepository;
+import com.atendimento.app.repositories.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,9 @@ public class AtendimentoService {
     @Autowired
     private AtendimentoRepository atendimentoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * Salva um novo atendimento no banco de dados.
      *
@@ -25,10 +34,24 @@ public class AtendimentoService {
      * @return Atendimento salvo.
      */
     public Atendimento criarAtendimento(Atendimento atendimento) {
-        // Gera um número de protocolo único
-        atendimento.setProtocolo(gerarProtocolo());
-        return atendimentoRepository.save(atendimento);
-    }
+    // Gera protocolo único
+    atendimento.setProtocolo(gerarProtocolo());
+
+    // Obtém o usuário autenticado
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName(); // login do atendente
+
+    // Busca o atendente no banco
+    User atendente = userRepository.findByUsername(username)
+    .orElseThrow(() -> new UsernameNotFoundException("Atendente não encontrado: " + username));
+
+    // Associa ao atendimento
+    atendimento.setAtendente(atendente);
+
+    // Salva
+    return atendimentoRepository.save(atendimento);
+}
+
 
     /**
      * Consulta atendimentos pelo CPF do cliente.

@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -149,7 +150,7 @@ public class AuthController {
      * @return true se o papel for válido, false caso contrário.
      */
     private boolean isValidRole(Role role) {
-        return role == Role.USER || role == Role.ADMIN;
+    return Arrays.asList(Role.values()).contains(role);
     }
 
     /**

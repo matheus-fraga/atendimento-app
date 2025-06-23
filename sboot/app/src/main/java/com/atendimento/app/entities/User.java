@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Entidade para representar os usuários na aplicação.
@@ -32,8 +33,8 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NotBlank(message = "O nome de usuário é obrigatório")
     @Size(min = 3, max = 50, message = "O nome de usuário deve ter entre 3 e 50 caracteres")

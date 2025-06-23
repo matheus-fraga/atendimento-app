@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Controlador para gerenciar usuários (admin).
@@ -68,7 +69,7 @@ public class AdminUserController {
     @Operation(summary = "Bloquear usuário", description = "Bloqueia um usuário pelo ID (somente administradores).")
     @PreAuthorize("hasRole('ADMIN')") // Somente administradores podem acessar este método
     @PatchMapping("/{userId}/block")
-    public ResponseEntity<?> bloquearUsuario(@PathVariable Long userId) {
+    public ResponseEntity<?> bloquearUsuario(@PathVariable UUID userId) {
         logger.info("Solicitação para bloquear o usuário com ID: {}", userId);
 
         Optional<User> usuarioOptional = userRepository.findById(userId);

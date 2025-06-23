@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.atendimento.app.utils.ValidCPF;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Entidade para representar os atendimentos na aplicação.
@@ -32,8 +33,8 @@ import java.time.LocalDateTime;
 public class Atendimento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NotBlank(message = "O nome do cliente é obrigatório")
     @Size(max = 100, message = "O nome do cliente deve ter no máximo 100 caracteres")

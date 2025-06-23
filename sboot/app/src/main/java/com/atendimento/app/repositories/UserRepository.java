@@ -1,6 +1,7 @@
 package com.atendimento.app.repositories;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +15,7 @@ import com.atendimento.app.entities.User;
  * e consultas personalizadas relacionadas aos usuários.
  * </p>
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Busca um usuário pelo nome de usuário.

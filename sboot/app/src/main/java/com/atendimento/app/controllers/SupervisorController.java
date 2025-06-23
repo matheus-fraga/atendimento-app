@@ -1,11 +1,14 @@
 package com.atendimento.app.controllers;
 
+import com.atendimento.app.dto.AtualizarDescricaoRequest;
 import com.atendimento.app.entities.Atendimento;
 import com.atendimento.app.repositories.AtendimentoRepository;
 import com.atendimento.app.repositories.UserRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Controlador para gerenciar atendimentos (supervisor).
@@ -37,7 +41,7 @@ public class SupervisorController {
      * @return Lista de atendimentos.
      */
     @Operation(summary = "Listar atendimentos", description = "Lista todos os atendimentos registrados (somente supervisores).")
-    @PreAuthorize("hasRole('SUPERVISOR')") // Somente supervisores podem acessar este método
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'ADMIN')") // Supervisores e administradores podem utilizar recurso.
     @GetMapping
     public ResponseEntity<List<Atendimento>> listarAtendimentos() {
         logger.info("Listando todos os atendimentos (somente supervisores).");
@@ -55,7 +59,7 @@ public class SupervisorController {
     @Operation(summary = "Editar atendimento", description = "Atualiza a descrição de um atendimento (somente supervisores).")
     @PreAuthorize("hasRole('SUPERVISOR')") // Somente supervisores podem acessar este método
     @PatchMapping("/{atendimentoId}/editar")
-    public ResponseEntity<?> editarAtendimento(@PathVariable Long atendimentoId, @RequestParam String novaDescricao) {
+    public ResponseEntity<?> editarAtendimento(@PathVariable UUID atendimentoId, @Valid @RequestBody AtualizarDescricaoRequest request) {
         logger.info("Solicitação para atualizar a descrição do atendimento com ID: {}", atendimentoId);
 
         var atendimentoOptional = atendimentoRepository.findById(atendimentoId);
@@ -65,7 +69,7 @@ public class SupervisorController {
         }
 
         Atendimento atendimento = atendimentoOptional.get();
-        atendimento.setDescricao(novaDescricao);
+        atendimento.setDescricao(request.getNovaDescricao());
         atendimentoRepository.save(atendimento);
 
         logger.info("Descrição do atendimento com ID {} atualizada com sucesso.", atendimentoId);
@@ -102,7 +106,7 @@ public class SupervisorController {
     @Operation(summary = "Consultar atendimentos de um atendente", description = "Lista todos os atendimentos registrados por um atendente específico (somente supervisores).")
     @PreAuthorize("hasRole('SUPERVISOR')") // Somente supervisores podem acessar este método
     @GetMapping("/atendente/{atendenteId}")
-    public ResponseEntity<?> consultarAtendimentosPorAtendente(@PathVariable Long atendenteId) {
+    public ResponseEntity<?> consultarAtendimentosPorAtendente(@PathVariable UUID atendenteId) {
         logger.info("Consultando atendimentos do atendente com ID: {}", atendenteId);
 
         // Verifica se o atendente existe

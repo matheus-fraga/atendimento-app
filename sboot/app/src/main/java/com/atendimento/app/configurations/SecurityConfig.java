@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.atendimento.app.security.CustomAuthenticationEntryPoint;
 import com.atendimento.app.security.JwtAuthFilter;
@@ -101,22 +100,19 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Habilita a proteção CSRF, necessária quando a autenticação usa JWT armazenado em cookie HttpOnly.
+        /**
+     * Desabilita a proteção CSRF, já que a autenticação é Stateless (JWT).
      * 
      * <p>
-     * Como o cookie JWT é enviado automaticamente pelo navegador, é preciso proteger contra ataques CSRF
-     * usando um token CSRF adicional enviado no header "X-XSRF-TOKEN".
+     * Como a aplicação utiliza autenticação baseada em tokens JWT, a proteção contra CSRF
+     * (Cross-Site Request Forgery) não é necessária.
      * </p>
      * 
      * @param http Instância do {@link HttpSecurity}.
      * @throws Exception Caso ocorra algum erro na configuração.
      */
     private void configureCsrf(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf
-            .ignoringRequestMatchers(PUBLIC_ROUTES) // Ignora CSRF só nas rotas públicas (/auth/**)
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        );
+        http.csrf(csrf -> csrf.disable());
     }
 
     /**
@@ -140,8 +136,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(PUBLIC_ROUTES).permitAll() // Rotas públicas
                 .requestMatchers(ADMIN_ROUTES).hasRole("ADMIN") // Rotas para administradores
-                .requestMatchers(USER_ROUTES).hasAnyRole("USER", "ADMIN") // Rotas para usuários e administradores
-                .requestMatchers(SUPERVISOR_ROUTES).hasRole("SUPERVISOR") // Rotas para supervisores
+                .requestMatchers(USER_ROUTES).hasAnyRole("USER", "ADMIN", "SUPERVISOR") // Rotas para usuários, supervisores e administradores.
+                .requestMatchers(SUPERVISOR_ROUTES).hasAnyRole("SUPERVISOR", "ADMIN") // Rotas para supervisores e administradores.
                 .anyRequest().authenticated() // Qualquer outra rota requer autenticação
         );
     }
